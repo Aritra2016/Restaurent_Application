@@ -26,11 +26,11 @@ export class SignupComponent implements OnInit {
       console.log(res)
       alert('Signup Successfully');
       this.signupForm.reset();
-      this._router.navigate(['/login']);
-    }), (err: any)=>{
+      this._router.navigate(['/restaurent']);
+    }, (err: any)=>{
       console.log(err);
       alert('Signup Error');
-    }
+    })
   }
 
 }
