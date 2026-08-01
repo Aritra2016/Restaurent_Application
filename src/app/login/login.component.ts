@@ -12,6 +12,7 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   showPassword = false;
   errorMessage = '';
+  loading = false;
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {}
 
@@ -30,12 +31,21 @@ export class LoginComponent implements OnInit {
       this.loginForm.markAllAsTouched();
       return;
     }
+    this.loading = true;
     const { email, password } = this.loginForm.value;
-    const result = this.auth.login(email, password);
-    if (result.success) {
-      this.router.navigate(['/home']);
-    } else {
-      this.errorMessage = result.message;
-    }
+    this.auth.login(email, password).subscribe({
+      next: (result) => {
+        this.loading = false;
+        if (result.success) {
+          this.router.navigate(['/home']);
+        } else {
+          this.errorMessage = result.message;
+        }
+      },
+      error: () => {
+        this.loading = false;
+        this.errorMessage = 'Login failed. Please try again.';
+      }
+    });
   }
 }

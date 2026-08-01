@@ -9,6 +9,9 @@
       "mobile": 7845581125,
       "rating": 4.2,
       "cuisine": "Indian",
+      "deliveryTime": 25,
+      "averageCost": 300,
+      "isOpen": true,
       "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&q=80"
     },
     {
@@ -20,6 +23,9 @@
       "mobile": 7894125251,
       "rating": 3.8,
       "cuisine": "Chinese",
+      "deliveryTime": 40,
+      "averageCost": 200,
+      "isOpen": true,
       "image": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=400&q=80"
     },
     {
@@ -31,6 +37,9 @@
       "mobile": 9658412369,
       "rating": 4.5,
       "cuisine": "Bengali",
+      "deliveryTime": 18,
+      "averageCost": 150,
+      "isOpen": false,
       "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80"
     }
   ],

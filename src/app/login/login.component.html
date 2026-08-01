@@ -33,7 +33,10 @@
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary btn-block">Login</button>
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+        {{ loading ? 'Logging in...' : 'Login' }}
+      </button>
     </form>
 
     <p class="auth-footer">Don't have an account? <a routerLink="/signup">Sign Up</a></p>

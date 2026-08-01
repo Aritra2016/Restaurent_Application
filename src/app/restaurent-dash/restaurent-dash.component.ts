@@ -48,9 +48,16 @@ export class RestaurentDashComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loggedInUser = this.auth.getLoggedInUser();
-    if (!this.loggedInUser) { this.router.navigate(['/login']); return; }
-    this.role = this.loggedInUser.role;
+    const user = this.auth.getLoggedInUser();
+    if (!user) { this.router.navigate(['/login']); return; }
+    // Force re-login if session has no role (stale session)
+    if (!user.role) {
+      this.auth.logout();
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.loggedInUser = user;
+    this.role = user.role;
 
     this.formValue = this.fb.group({
       name: ['', Validators.required],
@@ -70,12 +77,6 @@ export class RestaurentDashComponent implements OnInit {
     });
 
     this.loadRoleData();
-
-    const saved = localStorage.getItem('selectedRestaurant');
-    if (saved && this.role === 'customer') {
-      this.selectedRestaurant = JSON.parse(saved);
-      this.loadMenu(this.selectedRestaurant.id);
-    }
   }
 
   loadRoleData(): void {

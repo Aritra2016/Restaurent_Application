@@ -1,7 +1,13 @@
+<!-- Navbar -->
 <nav class="navbar navbar-dark bg-primary px-4 d-flex justify-content-between align-items-center">
   <h2 class="text-white mb-0">🍽️ Restaurant App</h2>
   <div class="d-flex align-items-center gap-2">
     <ng-container *ngIf="loggedInUser; else guestNav">
+      <!-- Staff: Add Restaurant button in navbar -->
+      <button *ngIf="loggedInUser.role === 'staff'"
+        class="btn btn-success btn-sm me-2" (click)="openAddRestaurant()">
+        + Add Restaurant
+      </button>
       <span class="text-white me-2">👤 {{ loggedInUser.name }}
         <span class="badge bg-light text-primary ms-1">{{ loggedInUser.role }}</span>
       </span>
@@ -19,30 +25,56 @@
   <!-- Hero -->
   <div class="hero-banner rounded-3 text-center text-white mb-4">
     <h1 class="display-5 fw-bold">Find Your Perfect Restaurant</h1>
-    <p class="fs-5 mb-4">Search, order, and enjoy — dine in or get it delivered</p>
-    <div class="search-bar mx-auto">
-      <input type="text" class="form-control form-control-lg" placeholder="🔍 Search by name or cuisine..."
-        [(ngModel)]="searchQuery" (input)="filterRestaurants()">
-    </div>
+    <p class="fs-5 mb-0">Search, order, and enjoy — dine in or get it delivered</p>
   </div>
 
-  <!-- Role-based Quick Actions -->
-  <div class="row g-3 mb-4" *ngIf="loggedInUser">
-    <div class="col-12">
-      <div class="alert alert-info d-flex align-items-center justify-content-between mb-0">
-        <span>
-          <strong>Welcome back, {{ loggedInUser.name }}!</strong>
-          <span *ngIf="loggedInUser.role === 'staff'"> — Manage your restaurant records and orders.</span>
-          <span *ngIf="loggedInUser.role === 'kitchen'"> — View and manage kitchen orders.</span>
-          <span *ngIf="loggedInUser.role === 'driver'"> — Check your assigned delivery orders.</span>
-          <span *ngIf="loggedInUser.role === 'customer'"> — Browse restaurants and place orders.</span>
-        </span>
-        <button routerLink="/restaurent" class="btn btn-primary btn-sm">Go to Dashboard →</button>
+  <!-- Role Banner -->
+  <div class="alert alert-info d-flex align-items-center justify-content-between mb-4" *ngIf="loggedInUser">
+    <span>
+      <strong>Welcome back, {{ loggedInUser.name }}!</strong>
+      <span *ngIf="loggedInUser.role === 'staff'"> — Manage restaurant records and orders.</span>
+      <span *ngIf="loggedInUser.role === 'kitchen'"> — View and manage kitchen orders.</span>
+      <span *ngIf="loggedInUser.role === 'driver'"> — Check your assigned delivery orders.</span>
+      <span *ngIf="loggedInUser.role === 'customer'"> — Browse restaurants and place orders.</span>
+    </span>
+    <button (click)="goToDashboard()" class="btn btn-primary btn-sm ms-3">Go to Dashboard →</button>
+  </div>
+
+  <!-- Staff Quick Actions -->
+  <div class="row g-3 mb-4" *ngIf="loggedInUser?.role === 'staff'">
+    <div class="col-md-4">
+      <div class="quick-action-card bg-success text-white p-3 rounded-3 shadow-sm d-flex align-items-center gap-3"
+        (click)="goToDashboard()" style="cursor:pointer">
+        <span class="fs-2">🏪</span>
+        <div>
+          <div class="fw-bold">Create Restaurant</div>
+          <small class="opacity-75">Add a new restaurant record</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="quick-action-card bg-info text-white p-3 rounded-3 shadow-sm d-flex align-items-center gap-3"
+        (click)="goToDashboard()" style="cursor:pointer">
+        <span class="fs-2">📋</span>
+        <div>
+          <div class="fw-bold">Manage Menus</div>
+          <small class="opacity-75">Update menu items & prices</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="quick-action-card bg-warning text-white p-3 rounded-3 shadow-sm d-flex align-items-center gap-3"
+        (click)="goToDashboard()" style="cursor:pointer">
+        <span class="fs-2">📦</span>
+        <div>
+          <div class="fw-bold">View Orders</div>
+          <small class="opacity-75">Track & update order status</small>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Stats Row -->
+  <!-- Stats -->
   <div class="row g-3 mb-4">
     <div class="col-md-3 col-6">
       <div class="stat-card bg-success text-white">
@@ -55,7 +87,7 @@
       <div class="stat-card bg-info text-white">
         <div class="stat-icon">📋</div>
         <div class="stat-value">{{ totalOrders }}</div>
-        <div class="stat-label">Orders Today</div>
+        <div class="stat-label">Total Orders</div>
       </div>
     </div>
     <div class="col-md-3 col-6">
@@ -74,70 +106,321 @@
     </div>
   </div>
 
-  <!-- Restaurant Cards -->
-  <h4 class="fw-bold mb-3">🍴 Restaurants
-    <span class="text-muted fs-6 fw-normal ms-2">{{ filteredRestaurants.length }} found</span>
-  </h4>
+  <!-- Search Bar -->
+  <div class="search-section mb-4">
+    <div class="input-group search-input-group">
+      <span class="input-group-text bg-white border-end-0">🔍</span>
+      <input type="text" class="form-control border-start-0"
+        placeholder="Search by name or cuisine..."
+        [(ngModel)]="searchQuery" (input)="filterRestaurants()">
+      <button class="btn btn-outline-secondary" *ngIf="searchQuery" (click)="clearFilters()">✕</button>
+    </div>
+  </div>
 
+  <!-- Main Layout: Filters + Cards -->
   <div class="row g-4 mb-5">
-    <div class="col-md-4" *ngFor="let r of filteredRestaurants">
-      <div class="restaurant-card shadow-sm h-100">
-        <img [src]="r.image" class="restaurant-img" [alt]="r.name" onerror="this.src='https://via.placeholder.com/400x200?text=Restaurant'">
-        <div class="restaurant-body">
-          <div class="d-flex justify-content-between align-items-start mb-1">
-            <h5 class="fw-bold mb-0">{{ r.name }}</h5>
-            <span class="rating-badge">⭐ {{ r.rating }}</span>
+
+    <!-- Filter Sidebar -->
+    <div class="col-md-3">
+      <div class="filter-panel">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6 class="fw-bold mb-0">🎛️ Filters</h6>
+          <button class="btn btn-link btn-sm p-0 text-danger" (click)="clearFilters()"
+            *ngIf="selectedCuisines.length || selectedRating || selectedDeliveryTime">Clear All</button>
+        </div>
+
+        <!-- Cuisine -->
+        <div class="filter-group">
+          <p class="filter-label">Cuisine</p>
+          <div *ngFor="let c of cuisineOptions" class="form-check mb-1">
+            <input class="form-check-input" type="checkbox" [id]="'c-'+c"
+              [checked]="selectedCuisines.includes(c)" (change)="toggleCuisine(c)">
+            <label class="form-check-label" [for]="'c-'+c">{{ c }}</label>
           </div>
-          <p class="text-muted small mb-1">🍽️ {{ r.cuisine }}</p>
-          <p class="text-muted small mb-1">📍 {{ r.address }}</p>
-          <p class="text-muted small mb-2">🕐 {{ r.services }}</p>
-          <div class="d-flex gap-2">
-            <button class="btn btn-primary btn-sm flex-fill" routerLink="/restaurent"
-              (click)="selectRestaurant(r)">View Menu</button>
-            <button class="btn btn-outline-warning btn-sm" (click)="openRatings(r)">⭐ Ratings</button>
+        </div>
+
+        <hr>
+
+        <!-- Rating -->
+        <div class="filter-group">
+          <p class="filter-label">Rating</p>
+          <div *ngFor="let r of [5,4,3]" class="filter-chip-row">
+            <button class="filter-chip" [class.active]="selectedRating === r" (click)="setRatingFilter(r)">
+              <span class="stars">{{ getStarDisplay(r) }}</span>
+              <span class="text-muted small ms-1">&amp; above</span>
+            </button>
+          </div>
+        </div>
+
+        <hr>
+
+        <!-- Delivery Time -->
+        <div class="filter-group">
+          <p class="filter-label">Delivery Time</p>
+          <div *ngFor="let t of [{label:'&lt;20 mins', val:20},{label:'&lt;30 mins', val:30},{label:'&lt;45 mins', val:45}]">
+            <button class="filter-chip" [class.active]="selectedDeliveryTime === t.val" (click)="setDeliveryFilter(t.val)">
+              {{ t.label }}
+            </button>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-12 text-center text-muted py-4" *ngIf="filteredRestaurants.length === 0">
-      <p class="fs-5">No restaurants found for "{{ searchQuery }}"</p>
+
+    <!-- Restaurant Cards -->
+    <div class="col-md-9">
+      <h5 class="fw-bold mb-3">🍴 Restaurants
+        <span class="text-muted fs-6 fw-normal ms-2">{{ filteredRestaurants.length }} found</span>
+      </h5>
+
+      <!-- Skeleton Loader -->
+      <div class="row g-4" *ngIf="loading">
+        <div class="col-md-6" *ngFor="let s of [1,2,3,4]">
+          <div class="skeleton-card">
+            <div class="skeleton-img"></div>
+            <div class="p-3">
+              <div class="skeleton-line w-75 mb-2"></div>
+              <div class="skeleton-line w-50 mb-2"></div>
+              <div class="skeleton-line w-40"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="!loading && filteredRestaurants.length === 0">
+        <div class="empty-icon">🍽️</div>
+        <h5>No Restaurants Found</h5>
+        <p class="text-muted">Try changing your filters or search query.</p>
+        <button class="btn btn-outline-primary btn-sm" (click)="clearFilters()">Clear Filters</button>
+      </div>
+
+      <!-- Cards -->
+      <div class="row g-4" *ngIf="!loading && filteredRestaurants.length > 0">
+        <div class="col-md-6" *ngFor="let r of filteredRestaurants">
+          <div class="restaurant-card shadow-sm h-100">
+            <div class="restaurant-img-wrap">
+              <img [src]="r.image" class="restaurant-img" [alt]="r.name"
+                onerror="this.src='https://placehold.co/400x200?text=Restaurant'">
+              <span class="open-badge" [class.closed]="!r.isOpen">
+                {{ r.isOpen ? 'Open' : 'Closed' }}
+              </span>
+            </div>
+            <div class="restaurant-body">
+              <div class="d-flex justify-content-between align-items-start mb-1">
+                <h5 class="fw-bold mb-0">{{ r.name }}</h5>
+                <span class="rating-badge">⭐ {{ r.rating }}</span>
+              </div>
+              <div class="stars-row mb-1">{{ getStarDisplay(r.rating) }}</div>
+              <div class="meta-row">
+                <span class="meta-chip">🍽️ {{ r.cuisine }}</span>
+                <span class="meta-chip" *ngIf="r.deliveryTime">🕐 {{ r.deliveryTime }} mins</span>
+                <span class="meta-chip" *ngIf="r.averageCost">₹{{ r.averageCost }} for two</span>
+              </div>
+              <div class="d-flex gap-2 mt-3">
+                <button class="btn btn-primary btn-sm flex-fill" (click)="openMenu(r)">🍴 View Menu</button>
+                <button class="btn btn-outline-warning btn-sm" (click)="openRatings(r)">⭐ Ratings</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
 </div>
 
-<!-- Ratings Modal -->
-<div class="modal fade" id="ratingsModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-scrollable">
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     ADD RESTAURANT MODAL (Staff - accessible from home page)
+════════════════════════════════════════════════════════════════════════════ -->
+<div class="modal fade" id="addRestoHomeModal" tabindex="-1">
+  <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header bg-warning text-white">
-        <h5 class="modal-title">⭐ Ratings — {{ selectedRestaurant?.name }}</h5>
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">🏪 Add New Restaurant</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <div *ngFor="let r of selectedRatings" class="rating-item mb-3">
-          <div class="d-flex justify-content-between">
-            <strong>{{ r.customerName }}</strong>
-            <span class="text-warning">{{ getStars(r.score) }}</span>
+        <form [formGroup]="addRestoForm">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label fw-semibold">Restaurant Name *</label>
+              <input class="form-control" formControlName="name" placeholder="e.g. Aryan Hotel"
+                [class.is-invalid]="addRestoForm.get('name')?.invalid && addRestoForm.get('name')?.touched">
+              <div class="invalid-feedback">Name is required.</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Email *</label>
+              <input class="form-control" formControlName="email" type="email" placeholder="restaurant@email.com"
+                [class.is-invalid]="addRestoForm.get('email')?.invalid && addRestoForm.get('email')?.touched">
+              <div class="invalid-feedback">Valid email required.</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Phone *</label>
+              <input class="form-control" formControlName="mobile" type="number" placeholder="10-digit number"
+                [class.is-invalid]="addRestoForm.get('mobile')?.invalid && addRestoForm.get('mobile')?.touched">
+              <div class="invalid-feedback">Phone is required.</div>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Address *</label>
+              <input class="form-control" formControlName="address" placeholder="Full address"
+                [class.is-invalid]="addRestoForm.get('address')?.invalid && addRestoForm.get('address')?.touched">
+              <div class="invalid-feedback">Address is required.</div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Cuisine</label>
+              <input class="form-control" formControlName="cuisine" placeholder="e.g. Indian, Chinese">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Services</label>
+              <input class="form-control" formControlName="services" placeholder="e.g. Lunch, Dinner">
+            </div>
           </div>
-          <p class="text-muted small mb-0">{{ r.comment }}</p>
-          <small class="text-muted">{{ r.createdAt }}</small>
+        </form>
+        <div class="alert alert-success mt-3" *ngIf="addRestoSuccess">
+          ✅ Restaurant added successfully!
         </div>
-        <p class="text-muted text-center" *ngIf="selectedRatings.length === 0">No ratings yet.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-success" (click)="submitAddRestaurant()" [disabled]="addRestoSaving">
+          {{ addRestoSaving ? 'Saving...' : 'Add Restaurant' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <hr *ngIf="loggedInUser?.role === 'customer'">
-        <div *ngIf="loggedInUser?.role === 'customer'">
-          <h6 class="fw-bold">Add Your Rating</h6>
-          <div class="mb-2">
-            <label class="form-label small">Score (1-5)</label>
-            <input type="number" class="form-control form-control-sm" [(ngModel)]="newRating.score" min="1" max="5">
-          </div>
-          <div class="mb-2">
-            <label class="form-label small">Comment</label>
-            <textarea class="form-control form-control-sm" [(ngModel)]="newRating.comment" rows="2"></textarea>
-          </div>
-          <button class="btn btn-warning btn-sm w-100" (click)="submitRating()">Submit Rating</button>
+<!-- VIEW MENU MODAL
+════════════════════════════════════════════════════════════════════════════ -->
+<div class="modal fade" id="menuViewModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <div>
+          <h5 class="modal-title mb-0">🍴 {{ selectedRestaurant?.name }}</h5>
+          <small>{{ selectedRestaurant?.cuisine }} · {{ selectedRestaurant?.address }}</small>
         </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+
+        <!-- Loading -->
+        <div class="text-center py-4" *ngIf="menuLoading">
+          <div class="spinner-border text-primary"></div>
+          <p class="mt-2 text-muted">Loading menu...</p>
+        </div>
+
+        <!-- Empty -->
+        <div class="text-center text-muted py-4" *ngIf="!menuLoading && menuItems.length === 0">
+          <p class="fs-5">No menu items available for this restaurant.</p>
+        </div>
+
+        <!-- Menu Items grouped by category -->
+        <ng-container *ngIf="!menuLoading && menuItems.length > 0">
+          <ng-container *ngFor="let cat of getCategories()">
+            <h6 class="fw-bold text-primary border-bottom pb-1 mb-3 mt-3">{{ cat }}</h6>
+            <div class="row g-3 mb-2">
+              <div class="col-md-6" *ngFor="let item of getItemsByCategory(cat)">
+                <div class="menu-item-card p-3 border rounded-3 d-flex justify-content-between align-items-center"
+                  [class.unavailable]="!item.available">
+                  <div>
+                    <h6 class="fw-semibold mb-1">{{ item.name }}</h6>
+                    <span class="badge bg-light text-dark border small">{{ item.category }}</span>
+                    <span class="badge bg-danger ms-1 small" *ngIf="!item.available">Unavailable</span>
+                  </div>
+                  <span class="fw-bold text-success fs-6">₹{{ item.price }}</span>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-primary" (click)="goToDashboard()" data-bs-dismiss="modal"
+          *ngIf="loggedInUser?.role === 'customer'">
+          Order Now →
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     RATINGS MODAL
+════════════════════════════════════════════════════════════════════════════ -->
+<div class="modal fade" id="ratingsModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <div>
+          <h5 class="modal-title mb-0">⭐ Ratings</h5>
+          <small class="text-dark">{{ ratingRestaurant?.name }}</small>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+
+        <!-- Loading -->
+        <div class="text-center py-4" *ngIf="ratingsLoading">
+          <div class="spinner-border text-warning"></div>
+          <p class="mt-2 text-muted">Loading ratings...</p>
+        </div>
+
+        <!-- Ratings List -->
+        <ng-container *ngIf="!ratingsLoading">
+          <div *ngFor="let r of selectedRatings" class="rating-item mb-3 pb-3 border-bottom">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <strong>{{ r.customerName }}</strong>
+              <span class="text-warning fs-5">{{ getStars(r.score) }}</span>
+            </div>
+            <p class="mb-1 text-dark">{{ r.comment }}</p>
+            <small class="text-muted">{{ r.createdAt }}</small>
+          </div>
+
+          <div class="text-center text-muted py-3" *ngIf="selectedRatings.length === 0">
+            <p>No ratings yet. Be the first to rate!</p>
+          </div>
+
+          <!-- Add Rating (customers only) -->
+          <ng-container *ngIf="loggedInUser?.role === 'customer'">
+            <hr>
+            <h6 class="fw-bold mb-3">Add Your Rating</h6>
+            <div class="mb-3">
+              <label class="form-label small fw-semibold">Score</label>
+              <div class="d-flex gap-2">
+                <button *ngFor="let s of [1,2,3,4,5]" type="button"
+                  class="btn btn-sm"
+                  [class.btn-warning]="newRating.score >= s"
+                  [class.btn-outline-warning]="newRating.score < s"
+                  (click)="newRating.score = s">
+                  ★
+                </button>
+                <span class="ms-2 text-muted small align-self-center">{{ newRating.score }}/5</span>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-semibold">Comment</label>
+              <textarea class="form-control" [(ngModel)]="newRating.comment"
+                rows="3" placeholder="Share your experience..."></textarea>
+            </div>
+            <button class="btn btn-warning w-100 fw-semibold"
+              (click)="submitRating()"
+              [disabled]="!newRating.comment.trim() || ratingSubmitting">
+              {{ ratingSubmitting ? 'Submitting...' : 'Submit Rating' }}
+            </button>
+          </ng-container>
+
+          <div class="alert alert-info mt-3 small" *ngIf="!loggedInUser">
+            <a routerLink="/login">Login</a> to submit a rating.
+          </div>
+          <div class="alert alert-info mt-3 small"
+            *ngIf="loggedInUser && loggedInUser.role !== 'customer'">
+            Only customers can submit ratings.
+          </div>
+        </ng-container>
+
       </div>
     </div>
   </div>
