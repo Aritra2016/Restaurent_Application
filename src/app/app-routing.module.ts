@@ -4,6 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { RestaurentDashComponent } from './restaurent-dash/restaurent-dash.component';
 import { SignupComponent } from './signup/signup.component';
 import { HomeDashboardComponent } from './home-dashboard/home-dashboard.component';
+import { RestaurantDetailsComponent } from './restaurant/pages/restaurant-details/restaurant-details.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,9 @@ const routes: Routes = [
   }, 
   {
    path: 'restaurent', component: RestaurentDashComponent
+  },
+  {
+    path: 'restaurant/:id', component: RestaurantDetailsComponent
   }
 ];
 

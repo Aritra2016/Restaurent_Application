@@ -217,7 +217,7 @@
                 <span class="meta-chip" *ngIf="r.averageCost">₹{{ r.averageCost }} for two</span>
               </div>
               <div class="d-flex gap-2 mt-3">
-                <button class="btn btn-primary btn-sm flex-fill" (click)="openMenu(r)">🍴 View Menu</button>
+                <button class="btn btn-primary btn-sm flex-fill" [routerLink]="['/restaurant', r.id]">🍴 View Menu</button>
                 <button class="btn btn-outline-warning btn-sm" (click)="openRatings(r)">⭐ Ratings</button>
               </div>
             </div>

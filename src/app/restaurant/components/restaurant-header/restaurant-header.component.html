@@ -1,0 +1,18 @@
+<div class="restaurant-banner position-relative" *ngIf="restaurant">
+  <img [src]="restaurant.image" class="banner-img w-100"
+    onerror="this.src='https://placehold.co/1200x300?text=Restaurant'">
+  <div class="banner-overlay d-flex align-items-end p-4">
+    <div class="text-white">
+      <h2 class="fw-bold mb-1">{{ restaurant.name }}</h2>
+      <div class="d-flex align-items-center gap-3 flex-wrap">
+        <span class="fs-5">{{ getStars(restaurant.rating) }} ({{ restaurant.rating }})</span>
+        <span class="meta-chip">🍽️ {{ restaurant.cuisine }}</span>
+        <span class="meta-chip" *ngIf="restaurant.deliveryTime">🕐 {{ restaurant.deliveryTime }} mins</span>
+        <span class="meta-chip" *ngIf="restaurant.averageCost">₹{{ restaurant.averageCost }} for two</span>
+        <span class="badge" [class.bg-success]="restaurant.isOpen" [class.bg-danger]="!restaurant.isOpen">
+          {{ restaurant.isOpen ? 'Open' : 'Closed' }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="cart-summary-panel border rounded-3 p-3 shadow-sm sticky-top" style="top: 80px">
+  <h6 class="fw-bold mb-3">🛒 Your Cart</h6>
+
+  <div class="alert alert-success small py-2" *ngIf="orderPlaced">
+    🎉 Order placed! Your food is being prepared.
+  </div>
+
+  <div class="text-muted text-center py-3 small" *ngIf="items.length === 0 && !orderPlaced">
+    Cart is empty
+  </div>
+
+  <ng-container *ngIf="items.length > 0">
+    <div *ngFor="let c of items" class="d-flex justify-content-between mb-2 small">
+      <span>{{ c.name }} × {{ c.qty }}</span>
+      <span class="fw-semibold">₹{{ c.price * c.qty }}</span>
+    </div>
+    <hr>
+    <div class="d-flex justify-content-between fw-bold mb-3">
+      <span>Total</span><span>₹{{ total }}</span>
+    </div>
+
+    <div class="mb-2">
+      <div class="d-flex gap-2">
+        <button class="btn btn-sm flex-fill"
+          [class.btn-primary]="orderType === 'dine-in'"
+          [class.btn-outline-primary]="orderType !== 'dine-in'"
+          (click)="orderType = 'dine-in'">🍽️ Dine In</button>
+        <button class="btn btn-sm flex-fill"
+          [class.btn-danger]="orderType === 'delivery'"
+          [class.btn-outline-danger]="orderType !== 'delivery'"
+          (click)="orderType = 'delivery'">🛵 Delivery</button>
+      </div>
+    </div>
+
+    <div class="mb-3" *ngIf="orderType === 'delivery'">
+      <textarea class="form-control form-control-sm" [(ngModel)]="deliveryAddress"
+        rows="2" placeholder="Enter delivery address"></textarea>
+    </div>
+
+    <button class="btn btn-success w-100 fw-semibold" (click)="placeOrder()" [disabled]="placing">
+      {{ placing ? 'Placing...' : 'Checkout →' }}
+    </button>
+  </ng-container>
+</div>

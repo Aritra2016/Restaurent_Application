@@ -8,14 +8,26 @@ export class ApiService {
   constructor(private _http: HttpClient) {}
 
   // Restaurants
-  postRestaurent(data: any) { return this._http.post<any>(`${this.baseUrl}/posts`, data); }
-  getRestaurent() { return this._http.get<any>(`${this.baseUrl}/posts`); }
-  deleteRestaurant(id: number) { return this._http.delete<any>(`${this.baseUrl}/posts/${id}`); }
-  updateRestaurant(id: number, data: any) { return this._http.put<any>(`${this.baseUrl}/posts/${id}`, data); }
+  postRestaurent(data: any) { 
+    return this._http.post<any>(`${this.baseUrl}/posts`, data);
+   }
+  getRestaurent() { 
+    return this._http.get<any>(`${this.baseUrl}/posts`); 
+  }
+  deleteRestaurant(id: number) { 
+    return this._http.delete<any>(`${this.baseUrl}/posts/${id}`);
+   }
+  updateRestaurant(id: number, data: any) {
+     return this._http.put<any>(`${this.baseUrl}/posts/${id}`, data); 
+    }
 
   // Menus
-  getMenuByRestaurant(restaurantId: number) { return this._http.get<any[]>(`${this.baseUrl}/menus?restaurantId=${restaurantId}`); }
-  getAllMenus() { return this._http.get<any[]>(`${this.baseUrl}/menus`); }
+  getMenuByRestaurant(restaurantId: number) { 
+    return this._http.get<any[]>(`${this.baseUrl}/menus?restaurantId=${restaurantId}`); 
+  }
+  getAllMenus() {
+     return this._http.get<any[]>(`${this.baseUrl}/menus`); 
+    }
   addMenuItem(data: any) { return this._http.post<any>(`${this.baseUrl}/menus`, data); }
   updateMenuItem(id: number, data: any) { return this._http.put<any>(`${this.baseUrl}/menus/${id}`, data); }
   deleteMenuItem(id: number) { return this._http.delete<any>(`${this.baseUrl}/menus/${id}`); }

@@ -1,0 +1,12 @@
+<div class="mb-3">
+  <h6 class="fw-bold mb-2">🏷️ Offers</h6>
+  <div class="d-flex gap-2 flex-wrap">
+    <div class="offer-chip border rounded-3 p-2 d-flex align-items-center gap-2" *ngFor="let o of offers">
+      <span class="fs-5">{{ o.icon }}</span>
+      <div>
+        <div class="fw-semibold small">{{ o.title }}</div>
+        <div class="text-muted" style="font-size:0.75rem">{{ o.subtitle }}</div>
+      </div>
+    </div>
+  </div>
+</div>

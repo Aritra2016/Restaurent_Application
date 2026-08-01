@@ -12,7 +12,7 @@
       "deliveryTime": 25,
       "averageCost": 300,
       "isOpen": true,
-      "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&q=80"
+      "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80"
     },
     {
       "id": 2,
@@ -26,7 +26,7 @@
       "deliveryTime": 40,
       "averageCost": 200,
       "isOpen": true,
-      "image": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=400&q=80"
+      "image": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800&q=80"
     },
     {
       "id": 3,
@@ -40,17 +40,17 @@
       "deliveryTime": 18,
       "averageCost": 150,
       "isOpen": false,
-      "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80"
+      "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80"
     }
   ],
   "menus": [
-    { "id": 1, "restaurantId": 1, "name": "Masala Dosa", "price": 80, "category": "Breakfast", "available": true },
-    { "id": 2, "restaurantId": 1, "name": "Chicken Curry", "price": 220, "category": "Lunch", "available": true },
-    { "id": 3, "restaurantId": 1, "name": "Paneer Butter Masala", "price": 180, "category": "Dinner", "available": true },
-    { "id": 4, "restaurantId": 2, "name": "Fried Rice", "price": 150, "category": "Lunch", "available": true },
-    { "id": 5, "restaurantId": 2, "name": "Chow Mein", "price": 120, "category": "Dinner", "available": true },
-    { "id": 6, "restaurantId": 3, "name": "Luchi Alur Dom", "price": 90, "category": "Breakfast", "available": true },
-    { "id": 7, "restaurantId": 3, "name": "Hilsa Fish Curry", "price": 350, "category": "Lunch", "available": true }
+    { "id": 1, "restaurantId": 1, "name": "Masala Dosa", "description": "Crispy rice crepe with spiced potato filling", "price": 80, "category": "Breakfast", "available": true, "veg": true, "preparationTime": 10, "image": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=300&q=80" },
+    { "id": 2, "restaurantId": 1, "name": "Chicken Curry", "description": "Tender chicken in rich aromatic gravy", "price": 220, "category": "Lunch", "available": true, "veg": false, "preparationTime": 20, "image": "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=300&q=80" },
+    { "id": 3, "restaurantId": 1, "name": "Paneer Butter Masala", "description": "Soft paneer cubes in creamy tomato sauce", "price": 180, "category": "Dinner", "available": true, "veg": true, "preparationTime": 15, "image": "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=300&q=80" },
+    { "id": 4, "restaurantId": 2, "name": "Fried Rice", "description": "Wok-tossed rice with vegetables and soy sauce", "price": 150, "category": "Lunch", "available": true, "veg": true, "preparationTime": 12, "image": "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=300&q=80" },
+    { "id": 5, "restaurantId": 2, "name": "Chow Mein", "description": "Stir-fried noodles with crispy vegetables", "price": 120, "category": "Dinner", "available": true, "veg": true, "preparationTime": 10, "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&q=80" },
+    { "id": 6, "restaurantId": 3, "name": "Luchi Alur Dom", "description": "Deep-fried bread with spiced potato curry", "price": 90, "category": "Breakfast", "available": true, "veg": true, "preparationTime": 15, "image": "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=300&q=80" },
+    { "id": 7, "restaurantId": 3, "name": "Hilsa Fish Curry", "description": "Traditional Bengali hilsa in mustard gravy", "price": 350, "category": "Lunch", "available": true, "veg": false, "preparationTime": 25, "image": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=300&q=80" }
   ],
   "orders": [
     {

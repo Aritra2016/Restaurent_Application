@@ -1,0 +1,32 @@
+<div class="mb-4">
+  <h6 class="fw-bold mb-3">⭐ Reviews</h6>
+
+  <div *ngFor="let r of ratings" class="review-item border rounded-3 p-3 mb-2">
+    <div class="d-flex justify-content-between mb-1">
+      <strong class="small">{{ r.customerName }}</strong>
+      <span class="text-warning">{{ getStars(r.score) }}</span>
+    </div>
+    <p class="mb-0 small text-muted">{{ r.comment }}</p>
+    <small class="text-muted">{{ r.createdAt }}</small>
+  </div>
+
+  <p class="text-muted small" *ngIf="ratings.length === 0">No reviews yet.</p>
+
+  <ng-container *ngIf="loggedInUser?.role === 'customer'">
+    <div class="border rounded-3 p-3 mt-3">
+      <h6 class="fw-semibold mb-2 small">Add Your Review</h6>
+      <div class="d-flex gap-1 mb-2">
+        <button *ngFor="let s of [1,2,3,4,5]" class="btn btn-sm"
+          [class.btn-warning]="newRating.score >= s"
+          [class.btn-outline-warning]="newRating.score < s"
+          (click)="newRating.score = s">★</button>
+      </div>
+      <textarea class="form-control form-control-sm mb-2" [(ngModel)]="newRating.comment"
+        rows="2" placeholder="Share your experience..."></textarea>
+      <button class="btn btn-warning btn-sm w-100" (click)="submit()"
+        [disabled]="!newRating.comment.trim() || submitting">
+        {{ submitting ? 'Submitting...' : 'Submit' }}
+      </button>
+    </div>
+  </ng-container>
+</div>

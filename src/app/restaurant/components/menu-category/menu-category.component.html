@@ -1,0 +1,8 @@
+<div class="mb-4">
+  <h6 class="fw-bold text-primary border-bottom pb-2 mb-3">{{ category }}</h6>
+  <div class="row g-3">
+    <div class="col-md-6" *ngFor="let item of items">
+      <app-menu-item-card [item]="item" [restaurantId]="restaurantId"></app-menu-item-card>
+    </div>
+  </div>
+</div>
