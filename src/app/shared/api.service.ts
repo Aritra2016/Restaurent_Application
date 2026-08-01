@@ -1,42 +1,36 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {map} from 'rxjs/operators';
-import { RestaurentData } from '../restaurent-dash/restaurent.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  [x: string]: any;
-  addRestaurent(restaurentModelObj: RestaurentData) {
-    throw new Error('Method not implemented.');
-  }
+
+  private baseUrl = 'http://localhost:3000';
 
   constructor(private _http: HttpClient) { }
-  //POST request
-  postRestaurent(data:any ) {
-    return this._http.post<any>("http://localhost:3000/posts", data).pipe(map((res:any)=>{
-      return res;
-    }))
+
+  postRestaurent(data: any) {
+    return this._http.post<any>(`${this.baseUrl}/posts`, data);
   }
-  //GET request
+
   getRestaurent() {
-    return this._http.get<any>("http://localhost:3000/posts").pipe(map((res:any)=>{
-      return res;
-    }));
+    return this._http.get<any>(`${this.baseUrl}/posts`);
   }
-  //delete request
-  deleteRestaurant(id:number) {
-    return this._http.delete<any>("http://localhost:3000/posts/"+id).pipe(map((res:any)=>{
-      return res;
-    }));
+
+  deleteRestaurant(id: number) {
+    return this._http.delete<any>(`${this.baseUrl}/posts/${id}`);
   }
-  //update request
+
   updateRestaurant(id: number, data: any) {
-    return this._http.put<any>("http://localhost:3000/posts/"+id,data).pipe(map((res:any)=>{
-      return res;
-    }));
+    return this._http.put<any>(`${this.baseUrl}/posts/${id}`, data);
   }
 
+  signUp(data: any) {
+    return this._http.post<any>(`${this.baseUrl}/signup`, data);
+  }
 
+  login(email: string, password: string) {
+    return this._http.get<any[]>(`${this.baseUrl}/signup?email=${email}&password=${password}`);
+  }
 }

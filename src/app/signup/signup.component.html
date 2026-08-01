@@ -1,34 +1,79 @@
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="text-center">
-                    <h1>Sign Up</h1>
-                    <h5>You can Sign Up here!</h5>
-                </div>
-                <form [formGroup]="signupForm" (ngSubmit)="signUp()">
-                    <div class="mb-3">
-                      <label class="form-label">Email address</label>
-                      <input  formControlName="email" type="email" class="form-control" id="exampleInputEmail1"  placeholder="Email address">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Name</label>
-                        <input formControlName="name"  type="text" class="form-control" id="exampleInputEmail1"  placeholder="Name">
-                      </div>
-                      <div class="mb-3">
-                        <label class="form-label">Phone Number</label>
-                        <input  formControlName="mobile"  type="number" class="form-control" id="exampleInputEmail1"  placeholder="Phone">
-                      </div>
-                    <div class="mb-3">
-                      <label class="form-label">Password</label>
-                      <input formControlName="password"  type="password" class="form-control" id="exampleInputPassword1">
-                    </div>
-                    <button type="submit" class="btn btn-primary">sign up</button>
-                  </form>
-                  <a style="color: blue; margin-top: 10px;" routerLink="/login">Already User? Click to Login</a>
-
-            </div>
-        </div>
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2>Create Account</h2>
+      <p>Join us and explore the best restaurants</p>
     </div>
+
+    <div class="alert alert-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <form [formGroup]="signupForm" (ngSubmit)="signUp()" novalidate>
+
+      <div class="form-group">
+        <label>Full Name</label>
+        <input formControlName="name" type="text" class="form-control"
+          [class.is-invalid]="f['name'].invalid && f['name'].touched" placeholder="John Doe">
+        <div class="invalid-feedback">
+          <span *ngIf="f['name'].errors?.['required']">Name is required.</span>
+          <span *ngIf="f['name'].errors?.['minlength']">Minimum 2 characters.</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input formControlName="email" type="email" class="form-control"
+          [class.is-invalid]="f['email'].invalid && f['email'].touched" placeholder="you@example.com">
+        <div class="invalid-feedback">
+          <span *ngIf="f['email'].errors?.['required']">Email is required.</span>
+          <span *ngIf="f['email'].errors?.['email']">Enter a valid email.</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Mobile Number</label>
+        <input formControlName="mobile" type="tel" class="form-control"
+          [class.is-invalid]="f['mobile'].invalid && f['mobile'].touched" placeholder="10-digit mobile number">
+        <div class="invalid-feedback">
+          <span *ngIf="f['mobile'].errors?.['required']">Mobile number is required.</span>
+          <span *ngIf="f['mobile'].errors?.['pattern']">Enter a valid 10-digit Indian mobile number.</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-group">
+          <input formControlName="password" [type]="showPassword ? 'text' : 'password'" class="form-control"
+            [class.is-invalid]="f['password'].invalid && f['password'].touched" placeholder="Min 8 chars">
+          <button type="button" class="btn btn-outline-secondary toggle-btn" (click)="showPassword = !showPassword">
+            {{ showPassword ? '🙈' : '👁️' }}
+          </button>
+        </div>
+        <div class="field-error" *ngIf="f['password'].invalid && f['password'].touched">
+          <span *ngIf="f['password'].errors?.['required']">Password is required.</span>
+          <span *ngIf="f['password'].errors?.['minlength']">Minimum 8 characters.</span>
+          <span *ngIf="f['password'].errors?.['pattern']">Must include uppercase, lowercase, number & special character.</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <div class="input-group">
+          <input formControlName="confirmPassword" [type]="showConfirm ? 'text' : 'password'" class="form-control"
+            [class.is-invalid]="(f['confirmPassword'].invalid || signupForm.errors?.['passwordMismatch']) && f['confirmPassword'].touched"
+            placeholder="Re-enter password">
+          <button type="button" class="btn btn-outline-secondary toggle-btn" (click)="showConfirm = !showConfirm">
+            {{ showConfirm ? '🙈' : '👁️' }}
+          </button>
+        </div>
+        <div class="field-error" *ngIf="f['confirmPassword'].touched">
+          <span *ngIf="f['confirmPassword'].errors?.['required']">Please confirm your password.</span>
+          <span *ngIf="!f['confirmPassword'].errors?.['required'] && signupForm.errors?.['passwordMismatch']">Passwords do not match.</span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+    </form>
+
+    <p class="auth-footer">Already have an account? <a routerLink="/login">Login</a></p>
+  </div>
 </div>

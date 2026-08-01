@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -10,34 +10,32 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  constructor(private formbuilder: FormBuilder, private _http:HttpClient, private _router:Router ) { }
+  showPassword = false;
+  errorMessage = '';
+
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.loginForm = this.formbuilder.group({
-      email: [''],
-      password: ['']
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
     });
   }
 
-  logIn() {
-    //console.log(this.loginForm.value);
-    this._http.get<any>('http://localhost:3000/signup').subscribe(
-      (res) => {
-        const user= res.find((a:any)=>{
-          return a.email === this.loginForm.value.email && a.password === this.loginForm.value.password;
-        });
-         if (user) {
-          alert(user.name + ' logged in successfully');
-          this._router.navigate(['/restaurent']);
-          this.loginForm.reset();
-         } else {
-          alert("Invalid credentials");
-         }
-        }, err=>{
-          console.log(err);
-        })
-      }
-    
+  get f() { return this.loginForm.controls; }
+
+  logIn(): void {
+    this.errorMessage = '';
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+    const { email, password } = this.loginForm.value;
+    const result = this.auth.login(email, password);
+    if (result.success) {
+      this.router.navigate(['/home']);
+    } else {
+      this.errorMessage = result.message;
+    }
   }
-
-
+}

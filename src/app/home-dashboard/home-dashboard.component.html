@@ -1,0 +1,73 @@
+<nav class="navbar navbar-dark bg-primary px-4">
+  <h2 class="text-white mb-0">🍽️ Restaurant App</h2>
+  <div>
+    <button routerLink="/login" class="btn btn-outline-light btn-sm me-2">Login</button>
+    <button routerLink="/signup" class="btn btn-light btn-sm">Sign Up</button>
+  </div>
+</nav>
+
+<div class="container mt-5">
+
+  <!-- Hero -->
+  <div class="p-5 mb-4 bg-light rounded-3 text-center">
+    <h1 class="display-5 fw-bold">Restaurant Records Management</h1>
+    <p class="fs-5 text-muted">Manage all your restaurant data in one place.</p>
+    <button routerLink="/restaurent" class="btn btn-primary btn-lg me-2">Go to Dashboard</button>
+    <button routerLink="/signup" class="btn btn-outline-primary btn-lg">Get Started</button>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-4">
+      <div class="card text-white bg-success h-100 shadow">
+        <div class="card-body text-center">
+          <h3 class="card-title">🏪 Total Restaurants</h3>
+          <p class="display-4 fw-bold">{{ totalRestaurants }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-white bg-info h-100 shadow">
+        <div class="card-body text-center">
+          <h3 class="card-title">📋 Manage Records</h3>
+          <p class="card-text mt-3">Add, edit or delete restaurant entries easily.</p>
+          <button routerLink="/restaurent" class="btn btn-light mt-2">Open</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-white bg-warning h-100 shadow">
+        <div class="card-body text-center">
+          <h3 class="card-title">🔐 Account</h3>
+          <p class="card-text mt-3">Login or create a new account to get started.</p>
+          <button routerLink="/login" class="btn btn-light mt-2 me-1">Login</button>
+          <button routerLink="/signup" class="btn btn-light mt-2">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Links -->
+  <div class="card shadow mb-5">
+    <div class="card-header bg-primary text-white fw-bold">Quick Links</div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        🏠 Restaurant Dashboard
+        <button routerLink="/restaurent" class="btn btn-sm btn-primary">Go</button>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        🔑 Login
+        <button routerLink="/login" class="btn btn-sm btn-secondary">Go</button>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        📝 Sign Up
+        <button routerLink="/signup" class="btn btn-sm btn-success">Go</button>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        💻 Source Code
+        <a href="https://github.com/sibashish99/Restaurent_Application" target="_blank" class="btn btn-sm btn-dark">GitHub</a>
+      </li>
+    </ul>
+  </div>
+
+</div>

@@ -15,6 +15,14 @@
       "email": "selection@abc.com",
       "services": "chai",
       "mobile": 78941252511
+    },
+    {
+      "id": 3,
+      "name": "aritra_khatua",
+      "address": "Vill+P.O- Radhaballavpur, Dist-East Medinipur, State-West Bengal",
+      "email": "aritrakhatua2@gmail.com",
+      "services": "chai",
+      "mobile": 9382638016
     }
   ],
   "signup": [
