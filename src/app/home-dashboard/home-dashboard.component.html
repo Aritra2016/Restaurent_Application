@@ -1,73 +1,144 @@
-<nav class="navbar navbar-dark bg-primary px-4">
+<nav class="navbar navbar-dark bg-primary px-4 d-flex justify-content-between align-items-center">
   <h2 class="text-white mb-0">🍽️ Restaurant App</h2>
-  <div>
-    <button routerLink="/login" class="btn btn-outline-light btn-sm me-2">Login</button>
-    <button routerLink="/signup" class="btn btn-light btn-sm">Sign Up</button>
+  <div class="d-flex align-items-center gap-2">
+    <ng-container *ngIf="loggedInUser; else guestNav">
+      <span class="text-white me-2">👤 {{ loggedInUser.name }}
+        <span class="badge bg-light text-primary ms-1">{{ loggedInUser.role }}</span>
+      </span>
+      <button (click)="logout()" class="btn btn-outline-light btn-sm">Logout</button>
+    </ng-container>
+    <ng-template #guestNav>
+      <button routerLink="/login" class="btn btn-outline-light btn-sm me-2">Login</button>
+      <button routerLink="/signup" class="btn btn-light btn-sm">Sign Up</button>
+    </ng-template>
   </div>
 </nav>
 
-<div class="container mt-5">
+<div class="container mt-4">
 
   <!-- Hero -->
-  <div class="p-5 mb-4 bg-light rounded-3 text-center">
-    <h1 class="display-5 fw-bold">Restaurant Records Management</h1>
-    <p class="fs-5 text-muted">Manage all your restaurant data in one place.</p>
-    <button routerLink="/restaurent" class="btn btn-primary btn-lg me-2">Go to Dashboard</button>
-    <button routerLink="/signup" class="btn btn-outline-primary btn-lg">Get Started</button>
+  <div class="hero-banner rounded-3 text-center text-white mb-4">
+    <h1 class="display-5 fw-bold">Find Your Perfect Restaurant</h1>
+    <p class="fs-5 mb-4">Search, order, and enjoy — dine in or get it delivered</p>
+    <div class="search-bar mx-auto">
+      <input type="text" class="form-control form-control-lg" placeholder="🔍 Search by name or cuisine..."
+        [(ngModel)]="searchQuery" (input)="filterRestaurants()">
+    </div>
   </div>
 
-  <!-- Stats Cards -->
+  <!-- Role-based Quick Actions -->
+  <div class="row g-3 mb-4" *ngIf="loggedInUser">
+    <div class="col-12">
+      <div class="alert alert-info d-flex align-items-center justify-content-between mb-0">
+        <span>
+          <strong>Welcome back, {{ loggedInUser.name }}!</strong>
+          <span *ngIf="loggedInUser.role === 'staff'"> — Manage your restaurant records and orders.</span>
+          <span *ngIf="loggedInUser.role === 'kitchen'"> — View and manage kitchen orders.</span>
+          <span *ngIf="loggedInUser.role === 'driver'"> — Check your assigned delivery orders.</span>
+          <span *ngIf="loggedInUser.role === 'customer'"> — Browse restaurants and place orders.</span>
+        </span>
+        <button routerLink="/restaurent" class="btn btn-primary btn-sm">Go to Dashboard →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3 col-6">
+      <div class="stat-card bg-success text-white">
+        <div class="stat-icon">🏪</div>
+        <div class="stat-value">{{ totalRestaurants }}</div>
+        <div class="stat-label">Restaurants</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="stat-card bg-info text-white">
+        <div class="stat-icon">📋</div>
+        <div class="stat-value">{{ totalOrders }}</div>
+        <div class="stat-label">Orders Today</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="stat-card bg-warning text-white">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-value">{{ avgRating }}</div>
+        <div class="stat-label">Avg Rating</div>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="stat-card bg-danger text-white">
+        <div class="stat-icon">🛵</div>
+        <div class="stat-value">{{ deliveryOrders }}</div>
+        <div class="stat-label">Deliveries</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Restaurant Cards -->
+  <h4 class="fw-bold mb-3">🍴 Restaurants
+    <span class="text-muted fs-6 fw-normal ms-2">{{ filteredRestaurants.length }} found</span>
+  </h4>
+
   <div class="row g-4 mb-5">
-    <div class="col-md-4">
-      <div class="card text-white bg-success h-100 shadow">
-        <div class="card-body text-center">
-          <h3 class="card-title">🏪 Total Restaurants</h3>
-          <p class="display-4 fw-bold">{{ totalRestaurants }}</p>
+    <div class="col-md-4" *ngFor="let r of filteredRestaurants">
+      <div class="restaurant-card shadow-sm h-100">
+        <img [src]="r.image" class="restaurant-img" [alt]="r.name" onerror="this.src='https://via.placeholder.com/400x200?text=Restaurant'">
+        <div class="restaurant-body">
+          <div class="d-flex justify-content-between align-items-start mb-1">
+            <h5 class="fw-bold mb-0">{{ r.name }}</h5>
+            <span class="rating-badge">⭐ {{ r.rating }}</span>
+          </div>
+          <p class="text-muted small mb-1">🍽️ {{ r.cuisine }}</p>
+          <p class="text-muted small mb-1">📍 {{ r.address }}</p>
+          <p class="text-muted small mb-2">🕐 {{ r.services }}</p>
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary btn-sm flex-fill" routerLink="/restaurent"
+              (click)="selectRestaurant(r)">View Menu</button>
+            <button class="btn btn-outline-warning btn-sm" (click)="openRatings(r)">⭐ Ratings</button>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card text-white bg-info h-100 shadow">
-        <div class="card-body text-center">
-          <h3 class="card-title">📋 Manage Records</h3>
-          <p class="card-text mt-3">Add, edit or delete restaurant entries easily.</p>
-          <button routerLink="/restaurent" class="btn btn-light mt-2">Open</button>
-        </div>
-      </div>
+    <div class="col-12 text-center text-muted py-4" *ngIf="filteredRestaurants.length === 0">
+      <p class="fs-5">No restaurants found for "{{ searchQuery }}"</p>
     </div>
-    <div class="col-md-4">
-      <div class="card text-white bg-warning h-100 shadow">
-        <div class="card-body text-center">
-          <h3 class="card-title">🔐 Account</h3>
-          <p class="card-text mt-3">Login or create a new account to get started.</p>
-          <button routerLink="/login" class="btn btn-light mt-2 me-1">Login</button>
-          <button routerLink="/signup" class="btn btn-light mt-2">Sign Up</button>
+  </div>
+
+</div>
+
+<!-- Ratings Modal -->
+<div class="modal fade" id="ratingsModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title">⭐ Ratings — {{ selectedRestaurant?.name }}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngFor="let r of selectedRatings" class="rating-item mb-3">
+          <div class="d-flex justify-content-between">
+            <strong>{{ r.customerName }}</strong>
+            <span class="text-warning">{{ getStars(r.score) }}</span>
+          </div>
+          <p class="text-muted small mb-0">{{ r.comment }}</p>
+          <small class="text-muted">{{ r.createdAt }}</small>
+        </div>
+        <p class="text-muted text-center" *ngIf="selectedRatings.length === 0">No ratings yet.</p>
+
+        <hr *ngIf="loggedInUser?.role === 'customer'">
+        <div *ngIf="loggedInUser?.role === 'customer'">
+          <h6 class="fw-bold">Add Your Rating</h6>
+          <div class="mb-2">
+            <label class="form-label small">Score (1-5)</label>
+            <input type="number" class="form-control form-control-sm" [(ngModel)]="newRating.score" min="1" max="5">
+          </div>
+          <div class="mb-2">
+            <label class="form-label small">Comment</label>
+            <textarea class="form-control form-control-sm" [(ngModel)]="newRating.comment" rows="2"></textarea>
+          </div>
+          <button class="btn btn-warning btn-sm w-100" (click)="submitRating()">Submit Rating</button>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- Quick Links -->
-  <div class="card shadow mb-5">
-    <div class="card-header bg-primary text-white fw-bold">Quick Links</div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        🏠 Restaurant Dashboard
-        <button routerLink="/restaurent" class="btn btn-sm btn-primary">Go</button>
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        🔑 Login
-        <button routerLink="/login" class="btn btn-sm btn-secondary">Go</button>
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        📝 Sign Up
-        <button routerLink="/signup" class="btn btn-sm btn-success">Go</button>
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        💻 Source Code
-        <a href="https://github.com/sibashish99/Restaurent_Application" target="_blank" class="btn btn-sm btn-dark">GitHub</a>
-      </li>
-    </ul>
-  </div>
-
 </div>

@@ -2,54 +2,82 @@
   "posts": [
     {
       "id": 1,
-      "name": "arayan hotel 1",
-      "address": "GOBINDAPUR , KAILASHAHAR , UNAKOTI TRIPURA",
-      "email": "sdfaf@gmail.com",
-      "services": "chai , samosa",
-      "mobile": 7845581125
+      "name": "Aryan Hotel",
+      "address": "Gobindapur, Kailashahar, Tripura",
+      "email": "aryan@gmail.com",
+      "services": "Breakfast, Lunch, Dinner",
+      "mobile": 7845581125,
+      "rating": 4.2,
+      "cuisine": "Indian",
+      "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&q=80"
     },
     {
       "id": 2,
-      "name": "selection",
-      "address": "GOBINDAPUR , KAILASHAHAR , UNAKOTI TRIPURA",
+      "name": "Selection Restaurant",
+      "address": "Gobindapur, Kailashahar, Tripura",
       "email": "selection@abc.com",
-      "services": "chai",
-      "mobile": 78941252511
+      "services": "Lunch, Dinner",
+      "mobile": 7894125251,
+      "rating": 3.8,
+      "cuisine": "Chinese",
+      "image": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=400&q=80"
     },
     {
       "id": 3,
-      "name": "aritra_khatua",
-      "address": "Vill+P.O- Radhaballavpur, Dist-East Medinipur, State-West Bengal",
-      "email": "aritrakhatua2@gmail.com",
-      "services": "chai",
-      "mobile": 9382638016
+      "name": "Annapurna Dhaba",
+      "address": "Tarulia, West Bengal",
+      "email": "annapurna@gmail.com",
+      "services": "Breakfast, Lunch",
+      "mobile": 9658412369,
+      "rating": 4.5,
+      "cuisine": "Bengali",
+      "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80"
     }
+  ],
+  "menus": [
+    { "id": 1, "restaurantId": 1, "name": "Masala Dosa", "price": 80, "category": "Breakfast", "available": true },
+    { "id": 2, "restaurantId": 1, "name": "Chicken Curry", "price": 220, "category": "Lunch", "available": true },
+    { "id": 3, "restaurantId": 1, "name": "Paneer Butter Masala", "price": 180, "category": "Dinner", "available": true },
+    { "id": 4, "restaurantId": 2, "name": "Fried Rice", "price": 150, "category": "Lunch", "available": true },
+    { "id": 5, "restaurantId": 2, "name": "Chow Mein", "price": 120, "category": "Dinner", "available": true },
+    { "id": 6, "restaurantId": 3, "name": "Luchi Alur Dom", "price": 90, "category": "Breakfast", "available": true },
+    { "id": 7, "restaurantId": 3, "name": "Hilsa Fish Curry", "price": 350, "category": "Lunch", "available": true }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "restaurantId": 1,
+      "restaurantName": "Aryan Hotel",
+      "customerName": "Aritra Khatua",
+      "items": [{ "name": "Chicken Curry", "price": 220, "qty": 2 }],
+      "total": 440,
+      "type": "delivery",
+      "status": "pending",
+      "address": "Tarulia, West Bengal",
+      "createdAt": "2024-01-15T10:30:00"
+    },
+    {
+      "id": 2,
+      "restaurantId": 1,
+      "restaurantName": "Aryan Hotel",
+      "customerName": "Sibashish",
+      "items": [{ "name": "Masala Dosa", "price": 80, "qty": 1 }],
+      "total": 80,
+      "type": "dine-in",
+      "status": "preparing",
+      "address": "",
+      "createdAt": "2024-01-15T11:00:00"
+    }
+  ],
+  "ratings": [
+    { "id": 1, "restaurantId": 1, "customerName": "Aritra", "score": 4, "comment": "Great food!", "createdAt": "2024-01-10" },
+    { "id": 2, "restaurantId": 2, "customerName": "Sibashish", "score": 4, "comment": "Good Chinese.", "createdAt": "2024-01-12" },
+    { "id": 3, "restaurantId": 3, "customerName": "Aritra", "score": 5, "comment": "Best Bengali food!", "createdAt": "2024-01-14" }
   ],
   "signup": [
-    {
-      "name": "arayan hotel 1",
-      "email": "sibashish@abc.com",
-      "mobile": 8769145511,
-      "password": "password@123",
-      "id": 1
-    },
-    {
-      "name": "Selection",
-      "email": "selection@abc.com",
-      "mobile": 3164631649,
-      "password": "passowrd@123",
-      "id": 2
-    },
-    {
-      "name": "aritrakhatua2@gmail.com",
-      "email": "Aritra Khatua",
-      "mobile": 9647206894,
-      "password": "Nopass26@",
-      "id": 3
-    }
-  ],
-  "comments": [],
-  "profile": {
-    "name": "typicode"
-  }
+    { "id": 1, "name": "Admin Staff", "email": "staff@abc.com", "mobile": 8769145511, "password": "Staff@123", "role": "staff" },
+    { "id": 2, "name": "Kitchen Chef", "email": "kitchen@abc.com", "mobile": 9876543210, "password": "Kitchen@123", "role": "kitchen" },
+    { "id": 3, "name": "Aritra Khatua", "email": "aritra@gmail.com", "mobile": 9647206894, "password": "Aritra@123", "role": "customer" },
+    { "id": 4, "name": "Driver Raju", "email": "driver@abc.com", "mobile": 9123456780, "password": "Driver@123", "role": "driver" }
+  ]
 }
